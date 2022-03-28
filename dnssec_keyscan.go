@@ -47,7 +47,7 @@ func (k *DNSKEY) ReadPrivateKey(q io.Reader, file string) (crypto.PrivateKey, er
 		if err != nil {
 			return nil, err
 		}
-		pub := k.publicKeyRSA()
+		pub := k.PublicKeyRSA()
 		if pub == nil {
 			return nil, ErrKey
 		}
@@ -58,7 +58,7 @@ func (k *DNSKEY) ReadPrivateKey(q io.Reader, file string) (crypto.PrivateKey, er
 		if err != nil {
 			return nil, err
 		}
-		pub := k.publicKeyECDSA()
+		pub := k.PublicKeyECDSA()
 		if pub == nil {
 			return nil, ErrKey
 		}

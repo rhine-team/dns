@@ -167,12 +167,12 @@ func (rr *SIG) Verify(k *KEY, buf []byte) error {
 	sig := buf[sigend:]
 	switch k.Algorithm {
 	case RSASHA1, RSASHA256, RSASHA512:
-		pk := k.publicKeyRSA()
+		pk := k.PublicKeyRSA()
 		if pk != nil {
 			return rsa.VerifyPKCS1v15(pk, cryptohash, hashed, sig)
 		}
 	case ECDSAP256SHA256, ECDSAP384SHA384:
-		pk := k.publicKeyECDSA()
+		pk := k.PublicKeyECDSA()
 		r := new(big.Int).SetBytes(sig[:len(sig)/2])
 		s := new(big.Int).SetBytes(sig[len(sig)/2:])
 		if pk != nil {
@@ -182,7 +182,7 @@ func (rr *SIG) Verify(k *KEY, buf []byte) error {
 			return ErrSig
 		}
 	case ED25519:
-		pk := k.publicKeyED25519()
+		pk := k.PublicKeyED25519()
 		if pk != nil {
 			if ed25519.Verify(pk, hashed, sig) {
 				return nil

@@ -431,7 +431,7 @@ func (rr *RRSIG) Verify(k *DNSKEY, rrset []RR) error {
 	switch rr.Algorithm {
 	case RSASHA1, RSASHA1NSEC3SHA1, RSASHA256, RSASHA512:
 		// TODO(mg): this can be done quicker, ie. cache the pubkey data somewhere??
-		pubkey := k.publicKeyRSA() // Get the key
+		pubkey := k.PublicKeyRSA() // Get the key
 		if pubkey == nil {
 			return ErrKey
 		}
@@ -441,7 +441,7 @@ func (rr *RRSIG) Verify(k *DNSKEY, rrset []RR) error {
 		return rsa.VerifyPKCS1v15(pubkey, cryptohash, h.Sum(nil), sigbuf)
 
 	case ECDSAP256SHA256, ECDSAP384SHA384:
-		pubkey := k.publicKeyECDSA()
+		pubkey := k.PublicKeyECDSA()
 		if pubkey == nil {
 			return ErrKey
 		}
@@ -458,7 +458,7 @@ func (rr *RRSIG) Verify(k *DNSKEY, rrset []RR) error {
 		return ErrSig
 
 	case ED25519:
-		pubkey := k.publicKeyED25519()
+		pubkey := k.PublicKeyED25519()
 		if pubkey == nil {
 			return ErrKey
 		}
@@ -501,7 +501,7 @@ func (rr *RRSIG) sigBuf() []byte {
 }
 
 // publicKeyRSA returns the RSA public key from a DNSKEY record.
-func (k *DNSKEY) publicKeyRSA() *rsa.PublicKey {
+func (k *DNSKEY) PublicKeyRSA() *rsa.PublicKey {
 	keybuf, err := fromBase64([]byte(k.PublicKey))
 	if err != nil {
 		return nil
@@ -554,7 +554,7 @@ func (k *DNSKEY) publicKeyRSA() *rsa.PublicKey {
 }
 
 // publicKeyECDSA returns the Curve public key from the DNSKEY record.
-func (k *DNSKEY) publicKeyECDSA() *ecdsa.PublicKey {
+func (k *DNSKEY) PublicKeyECDSA() *ecdsa.PublicKey {
 	keybuf, err := fromBase64([]byte(k.PublicKey))
 	if err != nil {
 		return nil
@@ -579,7 +579,7 @@ func (k *DNSKEY) publicKeyECDSA() *ecdsa.PublicKey {
 	return pubkey
 }
 
-func (k *DNSKEY) publicKeyED25519() ed25519.PublicKey {
+func (k *DNSKEY) PublicKeyED25519() ed25519.PublicKey {
 	keybuf, err := fromBase64([]byte(k.PublicKey))
 	if err != nil {
 		return nil
